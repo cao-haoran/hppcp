@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱心菜谱 | 给亲爱的家常美味</title>
+    <style>
+        :root {
+            --primary-color: #ff7b7b;
+            --secondary-color: #ff9f7b;
+            --text-color: #333;
+            --light-bg: #fff9e6;
+            --dark-bg: #f5f5f5;
+        }
+
+        body {
+            font-family: '微软雅黑', sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+            color: var(--text-color);
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            animation: fadeIn 1s ease-in;
+        }
+
+        .category {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .recipe-card {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 25px;
+            margin: 20px 0;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .recipe-card:hover {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .recipe-img {
+            width: 100%;
+            height: 350px; /* 调整图片高度 */
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            transition: transform 0.3s ease, border 0.3s ease;
+        }
+
+        .recipe-card:hover .recipe-img {
+            transform: scale(1.03);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+            margin-top: 0;
+            font-size: 24px;
+            position: relative;
+        }
+
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        h3 {
+            color: #666;
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .content-wrapper {
+            display: flex;
+            gap: 25px;
+        }
+
+        .ingredients, .steps {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        li:hover {
+            background: rgba(255, 123, 123, 0.1);
+        }
+
+        li::before {
+            content: "•";
+            margin-right: 10px;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        ol {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+
+        ol li {
+            margin-bottom: 5px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        ol li:hover {
+            background: rgba(255, 123, 123, 0.1);
+        }
+
+        .tips {
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 3px solid var(--primary-color);
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .tips::before {
+            content: "💡";
+            margin-right: 10px;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .recipe-card { 
+                grid-template-columns: 1fr; 
+            }
+            .recipe-img { 
+                height: 300px; 
+            }
+            .content-wrapper {
+                flex-direction: column;
+            }
+            .ingredients, .steps {
+                margin-bottom: 20px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>❤️ 黄萍萍的专属菜谱 ❤️</h1>
+        <p>每一口都是爱的味道</p>
+    </div>
+
+    <!-- 面食类 -->
+    <div class="category">
+        <h2>🍜 暖心汤面</h2>
+        
+        <div class="recipe-card">
+            <img src="..\图片\孜然拌面.jpg" class="recipe-img" alt="孜然拌面">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>面条 200g</li>
+                        <li>香肠 1根</li>
+                        <li>蒜末、葱花、芝麻 适量</li>
+                        <li>孜然粉、辣椒面 适量</li>
+                        <li>生抽 2勺</li>
+                        <li>老抽 半勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>盐和糖 少许</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>准备蒜末、葱花、芝麻，香肠切片，调料备用</li>
+                        <li>锅中热油，淋上热油激发香味</li>
+                        <li>香肠煎一下，泡面煮熟捞出</li>
+                        <li>调料汁：2勺生抽、半勺老抽、1勺陈醋、1勺蚝油、少许盐和糖，拌匀成酱汁</li>
+                        <li>加入黄瓜丝、花生米，倒入酱汁拌匀即可</li>
+                    </ol>
+                    <div class="tips">酱汁可根据个人口味调整</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\玉米排骨汤.jpg" class="recipe-img" alt="玉米排骨汤">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>排骨 500g</li>
+                        <li>玉米 1根</li>
+                        <li>胡萝卜 1个</li>
+                        <li>山药 1段</li>
+                        <li>葱姜适量</li>
+                        <li>料酒 1勺</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>排骨加葱姜料酒焯水，捞出沥水</li>
+                        <li>热锅入油翻炒片刻，加入玉米、山药、胡萝卜</li>
+                        <li>加清水炖至软烂加盐，出锅即可</li>
+                    </ol>
+                    <div class="tips">炖煮时间越长，汤越鲜美</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 家常菜类 -->
+    <div class="category">
+        <h2>🍲 温馨家常菜</h2>
+        
+        <div class="recipe-card">
+            <img src="..\图片\西蓝花炒虾仁.jpg" class="recipe-img" alt="西兰花炒虾仁">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>虾仁 300g</li>
+                        <li>西兰花 1颗</li>
+                        <li>蒜末 适量</li>
+                        <li>生抽 1勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>盐 少许</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>西兰花加盐、食用油焯水一次捞出沥干</li>
+                        <li>油热炒熟虾仁</li>
+                        <li>加入蒜末炒香，倒入西兰花和酱汁</li>
+                        <li>翻炒收汁即可出锅</li>
+                    </ol>
+                    <div class="tips">虾仁提前用料酒、淀粉腌制更鲜嫩</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\肉末豆角.jpg" class="recipe-img" alt="肉末豆角">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>豆角 200g</li>
+                        <li>肉沫 150g</li>
+                        <li>葱蒜 适量</li>
+                        <li>小米椒 适量</li>
+                        <li>生抽 2勺</li>
+                        <li>老抽 1勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>料酒 1勺</li>
+                        <li>白糖 半勺</li>
+                        <li>清水 半碗</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>豆角切碎，肉沫准备好，调料备用</li>
+                        <li>炒熟肉沫，放豆角炒至变色，倒入肉沫翻炒</li>
+                        <li>倒入酱汁煮开，油热炒香葱蒜小米椒</li>
+                        <li>倒入淀粉水，翻炒均匀出锅</li>
+                    </ol>
+                    <div class="tips">豆角一定要炒熟</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\肉丸炒白菜.jpg" class="recipe-img" alt="肉丸炒白菜">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>牛肉丸 200g</li>
+                        <li>白菜 1颗</li>
+                        <li>蒜末 适量</li>
+                        <li>青红辣椒 适量</li>
+                        <li>生抽 1勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>盐 少许</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>牛肉丸切片，油热煎牛肉丸</li>
+                        <li>煎至两面金黄，放入蒜末翻炒</li>
+                        <li>放入娃娃菜炒匀</li>
+                        <li>加入青红辣椒，一勺生抽、蚝油，少量盐翻炒均匀</li>
+                    </ol>
+                    <div class="tips">白菜可替换为其他喜欢的蔬菜</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\青椒炒蛋.jpg" class="recipe-img" alt="青椒炒蛋">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>鸡蛋 3个</li>
+                        <li>青椒 2个</li>
+                        <li>蒜瓣 适量</li>
+                        <li>干辣椒 适量</li>
+                        <li>生抽 1勺</li>
+                        <li>老抽 1勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>盐 少许</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>先煎4个焦香焦香的荷包蛋，青椒切段放入一丢丢盐煎出虎皮</li>
+                        <li>放入蒜瓣翻炒片刻，加入一勺老干妈、一勺生抽</li>
+                        <li>一勺蚝油，半勺老抽，放入荷包蛋翻炒均匀</li>
+                    </ol>
+                    <div class="tips">煎蛋时火候不宜太大，以免烧焦</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\干锅花菜.jpg" class="recipe-img" alt="干锅花菜">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>花菜 1颗</li>
+                        <li>葱姜蒜 适量</li>
+                        <li>干辣椒 适量</li>
+                        <li>豆瓣酱 1勺</li>
+                        <li>生抽 1勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>白糖 少许</li>
+                        <li>鸡精 少许</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>热锅无油倒花菜，干煸出水分</li>
+                        <li>热油倒葱姜蒜，1勺豆瓣酱炒出红油</li>
+                        <li>倒花菜，生抽、蚝油各1勺</li>
+                        <li>白糖鸡精少许，翻炒均匀，撒上葱段出锅</li>
+                    </ol>
+                    <div class="tips">花菜要选新鲜的，口感更好</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\油焖大虾.jpg" class="recipe-img" alt="油焖大虾">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>大虾 500g</li>
+                        <li>葱姜蒜 适量</li>
+                        <li>料酒 1勺</li>
+                        <li>生抽 2勺</li>
+                        <li>老抽 半勺</li>
+                        <li>香醋 1勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>番茄酱 1勺</li>
+                        <li>白糖 半勺</li>
+                        <li>盐 少许</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>虾洗净去虾线虾枪虾须</li>
+                        <li>热油炒香葱姜蒜末</li>
+                        <li>倒入虾翻炒至变色</li>
+                        <li>倒入调好的酱汁（料酒、生抽、老抽、香醋、蚝油、番茄酱、白糖、盐、凉水）</li>
+                        <li>翻炒至浓稠收汁，撒上葱花即可</li>
+                    </ol>
+                    <div class="tips">虾不要煎太久，以免变老</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\鱼香肉丝.jpg" class="recipe-img" alt="鱼香肉丝">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>猪肉 200g</li>
+                        <li>青椒 1个</li>
+                        <li>胡萝卜 1根</li>
+                        <li>木耳 适量</li>
+                        <li>蒜末 适量</li>
+                        <li>生抽 2勺</li>
+                        <li>醋 2勺</li>
+                        <li>白糖 2勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>淀粉 1勺</li>
+                        <li>红油豆瓣酱 1勺</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>准备好食材，腌制肉丝（一勺生抽、一勺淀粉、半勺料酒）</li>
+                        <li>青椒胡萝卜，木耳丝炒软</li>
+                        <li>调鱼香酱汁：2勺生抽、2勺醋、2勺白糖、1勺蚝油、1勺淀粉、1勺红油豆瓣酱、半碗水搅匀</li>
+                        <li>放入肉丝，倒入鱼香酱汁</li>
+                        <li>油热肉丝滑熟盛出，蒜沫炒香，放入肉丝，倒入鱼香酱汁煮至汤汁浓稠即可</li>
+                    </ol>
+                    <div class="tips">肉丝切得细一些更容易入味</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\酸辣土豆丝.jpg" class="recipe-img" alt="酸辣土豆丝">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>土豆 2个</li>
+                        <li>青椒 1个</li>
+                        <li>蒜末 适量</li>
+                        <li>花椒 适量</li>
+                        <li>干辣椒 适量</li>
+                        <li>生抽 15g</li>
+                        <li>醋 7g</li>
+                        <li>老干妈 20g</li>
+                        <li>盐和鸡精 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>两个土豆切丝，淘洗干净</li>
+                        <li>青椒切丝，下锅焯水两分钟</li>
+                        <li>捞出沥干水分</li>
+                        <li>热油爆香蒜末、花椒、干辣椒段</li>
+                        <li>加入土豆丝、青椒丝翻炒</li>
+                        <li>加入调料，倒入辣椒油，适量香菜拌匀</li>
+                    </ol>
+                    <div class="tips">土豆丝切得越细越容易入味</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\蛋炒火腿.jpg" class="recipe-img" alt="蛋炒火腿">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>火腿 2根</li>
+                        <li>鸡蛋 3个</li>
+                        <li>蒜末 适量</li>
+                        <li>生抽 2勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>辣椒面 1勺</li>
+                        <li>白糖 少许</li>
+                        <li>淀粉 1勺</li>
+                        <li>清水 半碗</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>碗里放入两勺生抽、一勺蚝油、一勺辣椒面、少许白糖、一勺淀粉、小半碗清水搅拌均匀</li>
+                        <li>鸡蛋打散，放入火腿翻炒均匀</li>
+                        <li>倒入调好的酱汁翻炒均匀即可</li>
+                    </ol>
+                    <div class="tips">火腿可替换为其他喜欢的肉类</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\可乐鸡翅.jpg" class="recipe-img" alt="可乐鸡翅">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>鸡翅 500g</li>
+                        <li>葱姜 适量</li>
+                        <li>料酒 1勺</li>
+                        <li>老抽 半勺</li>
+                        <li>盐 少许</li>
+                        <li>可乐 1瓶</li>
+                        <li>年糕 适量</li>
+                        <li>白芝麻 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>鸡翅双面划刀，凉水下锅加葱姜料酒焯水捞出，擦干水分</li>
+                        <li>油热下锅煎至两面金黄，放入葱姜蒜八角</li>
+                        <li>半勺老抽、少许盐焖煮5分钟</li>
+                        <li>倒入一瓶可乐，加两勺生抽</li>
+                        <li>放入年糕再煮5分钟，大火收汁撒上白芝麻、葱花即可</li>
+                    </ol>
+                    <div class="tips">可乐的甜度会影响成品口味，可根据个人喜好调整</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\炒土豆丝.jpg" class="recipe-img" alt="炒土豆丝">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>土豆 2个</li>
+                        <li>大蒜 3瓣</li>
+                        <li>小葱 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>土豆多过几次水</li>
+                        <li>土豆焯水2分钟</li>
+                        <li>放入土豆，快速翻炒几次</li>
+                        <li>葱蒜花椒爆香</li>
+                        <li>两勺生抽，些许盐，些许鸡精</li>
+                        <li>两勺香醋，炒匀，放入葱段，快去翻炒均匀即可</li>
+                    </ol>
+                    <div class="tips">土豆丝要切得均匀，口感更好</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\虾仁炒蛋.jpg" class="recipe-img" alt="虾仁炒蛋">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>虾仁 200g</li>
+                        <li>鸡蛋 3个</li>
+                        <li>生抽 1勺</li>
+                        <li>醋 1勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>糖 1勺</li>
+                        <li>辣椒粉 1勺</li>
+                        <li>淀粉 1勺</li>
+                        <li>清水 半碗</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>虾仁煎熟，鸡蛋打散煎熟</li>
+                        <li>加入虾仁和酱汁，小火翻炒收汁即可出锅</li>
+                    </ol>
+                    <div class="tips">虾仁和鸡蛋都容易熟，翻炒时间不宜过长</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\肉沫炒蒜台.jpg" class="recipe-img" alt="肉沫炒蒜苔">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>蒜苔 200g</li>
+                        <li>肉沫 150g</li>
+                        <li>蒜末 适量</li>
+                        <li>小米辣 适量</li>
+                        <li>生抽 2勺</li>
+                        <li>老抽 1勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>盐和白糖 少许</li>
+                        <li>淀粉 少许</li>
+                        <li>清水 半碗</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>蒜苔切段，肉沫准备好，调料备用</li>
+                        <li>葱姜蒜末炒香，倒入肉沫</li>
+                        <li>淋入调好的料汁，煮至浓稠</li>
+                        <li>蒜苔翻炒一分钟，倒入炒好的肉沫</li>
+                        <li>加点小米辣，翻炒均匀即可</li>
+                    </ol>
+                    <div class="tips">蒜苔不要炒太久，保持脆感</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\辣椒炒肉.jpg" class="recipe-img" alt="辣椒炒肉">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>猪肉 200g</li>
+                        <li>螺丝椒 2个</li>
+                        <li>姜蒜末 适量</li>
+                        <li>生抽 1勺</li>
+                        <li>老抽 1勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>盐和白糖 少许</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>准备螺丝椒，瘦肉加少许盐淀粉腌制</li>
+                        <li>热锅倒入肥肉片炒出油脂</li>
+                        <li>倒入瘦肉片炒至变色</li>
+                        <li>再倒入姜蒜末炒香</li>
+                        <li>再倒入辣椒，辣椒炒熟即可</li>
+                    </ol>
+                    <div class="tips">猪肉选带点肥肉的更香</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\素炒四季豆.jpg" class="recipe-img" alt="素炒四季豆">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>四季豆 300g</li>
+                        <li>干辣椒 适量</li>
+                        <li>蒜末 适量</li>
+                        <li>生抽 2勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>盐、糖 少许</li>
+                        <li>淀粉 半勺</li>
+                        <li>清水 半碗</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>食材：四季豆切片，干辣椒剪段，蒜末</li>
+                        <li>酱汁：2勺生抽、1勺蚝油，盐、糖少许、半勺淀粉、半碗清水搅匀</li>
+                        <li>热油爆香干辣椒、蒜末，倒入四季豆煸炒断生</li>
+                        <li>倒入酱汁，翻炒收汁出锅</li>
+                    </ol>
+                    <div class="tips">四季豆一定要炒熟，避免食物中毒</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\炒毛豆粒.jpg" class="recipe-img" alt="炒毛豆粒">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>毛豆 300g</li>
+                        <li>蒜末 适量</li>
+                        <li>小米辣 适量</li>
+                        <li>食用盐 适量</li>
+                        <li>鸡精 适量</li>
+                        <li>白糖 适量</li>
+                        <li>蚝油 1勺</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>毛豆粒焯水，爆香蒜末小米辣，加入豆粒炒匀</li>
+                        <li>加入适量食用盐、鸡精和白糖调味</li>
+                        <li>一勺蚝油，炒匀收汁盛出即可</li>
+                    </ol>
+                    <div class="tips">毛豆焯水可去除豆腥味</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\蒜香排骨.jpg" class="recipe-img" alt="蒜香排骨">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>排骨 500g</li>
+                        <li>蒜末 适量</li>
+                        <li>青红辣椒 适量</li>
+                        <li>葱姜 适量</li>
+                        <li>料酒 1勺</li>
+                        <li>生抽 2勺</li>
+                        <li>盐、糖 少许</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>排骨冷水下锅，葱、姜、料酒煮开，撇去浮沫转中小火煮至30分钟</li>
+                        <li>油温六成热放排骨炸微黄捞出</li>
+                        <li>锅底留少许油，蒜末、辣椒粉、孜然粉、烧烤料各半勺炒匀</li>
+                        <li>倒入排骨+2勺生抽、盐、糖少许翻炒均匀</li>
+                        <li>撒上青红椒翻炒出锅</li>
+                    </ol>
+                    <div class="tips">排骨提前煮熟可缩短炸的时间，更易入味</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱心菜谱 | 饮品专区</title>
+    <style>
+        :root {
+            --primary-color: #ff7b7b;
+            --secondary-color: #ff9f7b;
+            --text-color: #333;
+            --light-bg: #fff9e6;
+            --dark-bg: #f5f5f5;
+        }
+
+        body {
+            font-family: '微软雅黑', sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+            color: var(--text-color);
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in;
+        }
+
+        .category {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .recipe-card {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 25px;
+            margin: 20px 0;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .recipe-card:hover {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .recipe-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            transition: transform 0.3s ease, border 0.3s ease;
+        }
+
+        .recipe-card:hover .recipe-img {
+            transform: scale(1.03);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+            margin-top: 0;
+            font-size: 24px;
+            position: relative;
+        }
+
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        h3 {
+            color: #666;
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .content-wrapper {
+            display: flex;
+            gap: 25px;
+        }
+
+        .ingredients,
+        .steps {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        li:hover {
+            background: rgba(255, 123, 123, 0.1);
+        }
+
+        li::before {
+            content: "•";
+            margin-right: 10px;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        ol {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+
+        ol li {
+            margin-bottom: 5px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        ol li:hover {
+            background: rgba(255, 123, 123, 0.1);
+        }
+
+        .tips {
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 3px solid var(--primary-color);
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .tips::before {
+            content: "💡";
+            margin-right: 10px;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .recipe-card {
+                grid-template-columns: 1fr;
+            }
+
+            .recipe-img {
+                height: 300px;
+            }
+
+            .content-wrapper {
+                flex-direction: column;
+            }
+
+            .ingredients,
+            .steps {
+                margin-bottom: 20px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 新增样式 */
+        .banner {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .banner h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .banner p {
+            font-size: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>❤️ 黄萍萍的专属菜谱 ❤️</h1>
+        <p>每一口都是爱的味道</p>
+    </div>
+    <div class="banner">
+        <h2>🍹 欢迎来到饮品专区</h2>
+        <p>无论是清晨的第一杯茶，还是午后的小憩时光，一杯美味的饮品总能带来愉悦的心情。在这里，我们将为您带来各种健康又美味的饮品制作方法，让您轻松享受生活中的小确幸。</p>
+        <a href="index.html" class="back-link">返回首页</a>
+    </div>
+
+    <!-- 饮品菜谱 -->
+    <div class="category">
+        <h2>🍹 健康饮品</h2>
+
+        <div class="recipe-card">
+            <img src="..\图片\芒果奶冻西米露.jpg" class="recipe-img" alt="芒果奶冻西米露">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>牛奶 250ml</li>
+                        <li>白凉粉 30g</li>
+                        <li>芒果 适量</li>
+                        <li>西米 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>牛奶中加入白凉粉，搅拌均匀后小火煮开</li>
+                        <li>倒入碗中冷却2小时</li>
+                        <li>西米提前煮熟，过凉水备用</li>
+                        <li>奶冻切块，与芒果、西米一起放入碗中</li>
+                        <li>倒入牛奶搅拌均匀即可</li>
+                    </ol>
+                    <div class="tips">奶冻冷却时间要足够，这样口感更好</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\苹果热橙茶.jpg" class="recipe-img" alt="苹果热橙茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>苹果 1个</li>
+                        <li>橙子 1个</li>
+                        <li>红枣 5-6颗</li>
+                        <li>柠檬 1片</li>
+                        <li>枸杞 适量</li>
+                        <li>清水 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>准备所有食材，苹果和橙子切片</li>
+                        <li>将所有食材放入锅中</li>
+                        <li>加入适量清水</li>
+                        <li>中小火煮5分钟</li>
+                        <li>稍放凉后加入柠檬片即可</li>
+                    </ol>
+                    <div class="tips">可以根据个人口味调整煮的时间和水量</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\桂圆玫瑰红茶.jpg" class="recipe-img" alt="桂圆玫瑰红茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>桂圆 适量</li>
+                        <li>玫瑰花 适量</li>
+                        <li>红茶 适量</li>
+                        <li>冰糖 适量</li>
+                        <li>清水 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>准备所有食材</li>
+                        <li>将所有食材放入锅中</li>
+                        <li>加入适量清水</li>
+                        <li>煮2-3分钟即可</li>
+                    </ol>
+                    <div class="tips">可以根据个人口味调整冰糖的用量</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\柚子陈皮茶.jpg" class="recipe-img" alt="柚子陈皮茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>柚子 1个</li>
+                        <li>陈皮 一大块</li>
+                        <li>红茶 适量</li>
+                        <li>茯苓 8-10颗</li>
+                        <li>山楂 5块</li>
+                        <li>冰糖 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>柚子切块，陈皮切小块</li>
+                        <li>红茶适量，茯苓和山楂准备好</li>
+                        <li>将所有食材放入锅中</li>
+                        <li>加入适量清水</li>
+                        <li>煮3-5分钟后加入冰糖即可</li>
+                    </ol>
+                    <div class="tips">可以根据个人口味调整冰糖的用量</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\橘子热红茶.jpg" class="recipe-img" alt="橘子热红茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>橘子 3-4个</li>
+                        <li>柠檬 1个</li>
+                        <li>红茶 适量</li>
+                        <li>冰糖 适量</li>
+                        <li>清水 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>橘子剥皮，柠檬切片</li>
+                        <li>橘子捣一捣，捣出汁水</li>
+                        <li>准备红茶和冰糖</li>
+                        <li>倒入适量清水，小火煮开</li>
+                        <li>中途记得搅拌一下，把果肉散开</li>
+                    </ol>
+                    <div class="tips">煮的时候火候不宜太大，以免烧焦</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\苹果姜丝茶.jpg" class="recipe-img" alt="苹果姜丝茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>苹果 1个</li>
+                        <li>姜丝 适量</li>
+                        <li>红枣 5-6颗</li>
+                        <li>枸杞 适量</li>
+                        <li>冰糖 适量</li>
+                        <li>清水 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>苹果切片，姜切丝</li>
+                        <li>准备红枣和枸杞</li>
+                        <li>将所有食材放入锅中</li>
+                        <li>加入适量清水</li>
+                        <li>煮15分钟即可</li>
+                    </ol>
+                    <div class="tips">煮的时候可以适当调整水量</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\柠檬烤红茶.jpg" class="recipe-img" alt="柠檬烤红茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>柠檬 2个</li>
+                        <li>红茶 适量</li>
+                        <li>冰糖 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>柠檬用盐搓洗表面</li>
+                        <li>切片后撒盐和白糖</li>
+                        <li>捣出汁腌制15分钟</li>
+                        <li>红茶加水煮开</li>
+                        <li>过滤出茶叶，加入冰糖放凉</li>
+                        <li>碗中放入柠檬，加入茶水即可</li>
+                    </ol>
+                    <div class="tips">柠檬腌制时间不宜过长，以免苦味过重</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\芭乐草莓热果茶.jpg" class="recipe-img" alt="芭乐草莓热果茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>芭乐 1个</li>
+                        <li>草莓 10-15颗</li>
+                        <li>柠檬 1个</li>
+                        <li>冰糖 适量</li>
+                        <li>红茶 适量</li>
+                        <li>清水 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>芭乐切块，草莓洗净对半切</li>
+                        <li>柠檬切片</li>
+                        <li>将所有食材放入锅中</li>
+                        <li>加入适量清水</li>
+                        <li>煮开后加入冰糖即可</li>
+                    </ol>
+                    <div class="tips">可以根据个人口味调整冰糖的用量</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\甘蔗雪梨汤.jpg" class="recipe-img" alt="甘蔗雪梨汤">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>甘蔗 1段</li>
+                        <li>雪梨 1个</li>
+                        <li>清水 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>甘蔗去皮切小段</li>
+                        <li>雪梨切块</li>
+                        <li>将所有食材放入锅中</li>
+                        <li>加入适量清水</li>
+                        <li>煮10分钟后转小火煮5分钟</li>
+                    </ol>
+                    <div class="tips">可以根据个人口味加入适量冰糖</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\雪梨金桔茶.jpg" class="recipe-img" alt="雪梨金桔茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>雪梨 1个</li>
+                        <li>金桔 10-15个</li>
+                        <li>红枣 5-6颗</li>
+                        <li>枸杞 适量</li>
+                        <li>冰糖 适量</li>
+                        <li>清水 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>雪梨和金桔用盐搓洗表面</li>
+                        <li>切块放入锅中</li>
+                        <li>加入适量清水</li>
+                        <li>煮15分钟后加入枸杞即可</li>
+                    </ol>
+                    <div class="tips">煮的时候火候不宜太大，以免烧焦</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\石榴玫瑰茶.jpg" class="recipe-img" alt="石榴玫瑰茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>石榴 1个</li>
+                        <li>干玫瑰花 适量</li>
+                        <li>冰糖 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>石榴和干玫瑰花一起捣出汁</li>
+                        <li>过滤出玫瑰石榴汁</li>
+                        <li>加入冰糖即可</li>
+                    </ol>
+                    <div class="tips">可以根据个人口味调整冰糖的用量</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\菠萝冷泡茶.jpg" class="recipe-img" alt="菠萝冷泡茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>菠萝 1个</li>
+                        <li>红茶 适量</li>
+                        <li>盐 适量</li>
+                        <li>矿泉水 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>菠萝切块，红茶切碎</li>
+                        <li>把茶香捣进菠萝里</li>
+                        <li>加入矿泉水</li>
+                        <li>放冰箱冷藏6小时</li>
+                    </ol>
+                    <div class="tips">冷藏时间越长，茶香越浓郁</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\百香果柠檬茶.jpg" class="recipe-img" alt="百香果柠檬茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>百香果 2个</li>
+                        <li>柠檬 1个</li>
+                        <li>小青柠 2个</li>
+                        <li>冰糖 200g</li>
+                        <li>蜂蜜 200g</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>百香果对半切开挖出果肉</li>
+                        <li>柠檬、小青柠切块去籽</li>
+                        <li>切好的柠檬、小青柠倒入碗中</li>
+                        <li>加入冰糖和蜂蜜</li>
+                        <li>倒入百香果，充分搅拌均匀</li>
+                        <li>腌制2小时，直到冰糖完全融化</li>
+                    </ol>
+                    <div class="tips">可以根据个人口味调整冰糖和蜂蜜的用量</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\蜜桃乌龙茶.jpg" class="recipe-img" alt="蜜桃乌龙茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>水蜜桃 2个</li>
+                        <li>青柠 1个</li>
+                        <li>乌龙茶 适量</li>
+                        <li>冰糖 适量</li>
+                        <li>冰块 适量</li>
+                        <li>气泡水 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>水蜜桃、青柠、乌龙茶、冰糖准备好</li>
+                        <li>捣碎出汁</li>
+                        <li>加入适量冰块</li>
+                        <li>倒入适量气泡水</li>
+                        <li>混匀即可开喝</li>
+                    </ol>
+                    <div class="tips">可以根据个人口味调整冰糖的用量</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\焦糖烤橙茶.jpg" class="recipe-img" alt="焦糖烤橙茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>橙子 2个</li>
+                        <li>红茶 适量</li>
+                        <li>白糖 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>橙子用盐搓洗去涩，切成薄片</li>
+                        <li>红茶小火炒出香味</li>
+                        <li>倒入白糖铺底，小火熬至焦糖</li>
+                        <li>铺上橙子片，兑水煮至沸腾</li>
+                        <li>关火焖半小时，碗中装好橙片</li>
+                        <li>倒入茶汤即可</li>
+                    </ol>
+                    <div class="tips">煮的时候火候不宜太大，以免烧焦</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\草莓热红茶.jpg" class="recipe-img" alt="草莓热红茶">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>草莓 10-15颗</li>
+                        <li>柠檬 1个</li>
+                        <li>红茶 适量</li>
+                        <li>冰糖 适量</li>
+                        <li>清水 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>草莓洗净对半切开</li>
+                        <li>柠檬切片</li>
+                        <li>红茶提前开水冲泡备用</li>
+                        <li>草莓+冰糖+少量水，小火煮开</li>
+                        <li>边煮边把草莓捣泥出汁</li>
+                        <li>挤入几滴柠檬汁增加风味</li>
+                        <li>倒入红茶茶汤，搅拌均匀再次煮开</li>
+                        <li>倒出茶汤，过滤掉果肉</li>
+                        <li>碗中加草莓块、柠檬片装饰</li>
+                    </ol>
+                    <div class="tips">可以根据个人口味调整冰糖的用量</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

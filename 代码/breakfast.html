@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱心菜谱 | 早餐专区</title>
+    <style>
+        :root {
+            --primary-color: #ff7b7b;
+            --secondary-color: #ff9f7b;
+            --text-color: #333;
+            --light-bg: #fff9e6;
+            --dark-bg: #f5f5f5;
+        }
+
+        body {
+            font-family: '微软雅黑', sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+            color: var(--text-color);
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in;
+        }
+
+        .category {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .recipe-card {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 25px;
+            margin: 20px 0;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .recipe-card:hover {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .recipe-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            transition: transform 0.3s ease, border 0.3s ease;
+        }
+
+        .recipe-card:hover .recipe-img {
+            transform: scale(1.03);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+            margin-top: 0;
+            font-size: 24px;
+            position: relative;
+        }
+
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        h3 {
+            color: #666;
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .content-wrapper {
+            display: flex;
+            gap: 25px;
+        }
+
+        .ingredients,
+        .steps {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        li:hover {
+            background: rgba(255, 123, 123, 0.1);
+        }
+
+        li::before {
+            content: "•";
+            margin-right: 10px;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        ol {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+
+        ol li {
+            margin-bottom: 5px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        ol li:hover {
+            background: rgba(255, 123, 123, 0.1);
+        }
+
+        .tips {
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 3px solid var(--primary-color);
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .tips::before {
+            content: "💡";
+            margin-right: 10px;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .recipe-card {
+                grid-template-columns: 1fr;
+            }
+
+            .recipe-img {
+                height: 300px;
+            }
+
+            .content-wrapper {
+                flex-direction: column;
+            }
+
+            .ingredients,
+            .steps {
+                margin-bottom: 20px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 新增样式 */
+        .banner {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .banner h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .banner p {
+            font-size: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>❤️ 黄萍萍的专属菜谱 ❤️</h1>
+        <p>每一口都是爱的味道</p>
+    </div>
+    <div class="banner">
+        <h2>🍳 欢迎来到早餐专区</h2>
+        <p>早餐是一天中最重要的一餐，它不仅能够提供能量，还能帮助我们保持健康。在这里，我们将为您带来各种美味又营养的早餐制作方法，让您轻松开启美好的一天。</p>
+        <a href="index.html" class="back-link">返回首页</a>
+    </div>
+
+    <!-- 早餐菜谱 -->
+    <div class="category">
+        <h2>🍳 美味早餐</h2>
+
+        <div class="recipe-card">
+            <img src="..\图片\鸡蛋卷.jpg" class="recipe-img" alt="鸡蛋卷">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>鸡蛋 3个</li>
+                        <li>胡萝卜 适量</li>
+                        <li>黄瓜 适量</li>
+                        <li>葱花 适量</li>
+                        <li>盐 适量</li>
+                        <li>食用油 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>胡萝卜切小丁，黄瓜切小丁</li>
+                        <li>碗中打入3个鸡蛋，加入胡萝卜丁、黄瓜丁和葱花</li>
+                        <li>加少许盐搅拌均匀</li>
+                        <li>锅热少油，倒入鸡蛋液</li>
+                        <li>中小火煎至底部定型，慢慢卷起</li>
+                        <li>卷好后再每面煎至金黄酥脆即可</li>
+                    </ol>
+                    <div class="tips">煎蛋卷时火候不宜太大，以免烧焦</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\荷包蛋汤.jpg" class="recipe-img" alt="荷包蛋汤">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>鸡蛋 2个</li>
+                        <li>葱花 适量</li>
+                        <li>香菜 适量</li>
+                        <li>盐 适量</li>
+                        <li>胡椒粉 适量</li>
+                        <li>生抽 1勺</li>
+                        <li>香油 半勺</li>
+                        <li>清水 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>锅中加水煮开关火</li>
+                        <li>大勺子先加入一点清水再打入鸡蛋</li>
+                        <li>将勺子贴近水面滑入锅内</li>
+                        <li>盖锅盖焖2分钟成型</li>
+                        <li>再开中小火煮2分钟捞出</li>
+                        <li>准备葱花、香菜、少许盐、少许胡椒粉、1勺生抽、半勺香油</li>
+                        <li>倒入开水，放入煮好的荷包蛋</li>
+                    </ol>
+                    <div class="tips">煮荷包蛋时水不要太多，以免蛋散开</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\早餐面.jpg" class="recipe-img" alt="早餐面">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>面条 适量</li>
+                        <li>鸡蛋 1个</li>
+                        <li>火腿 适量</li>
+                        <li>青菜 适量</li>
+                        <li>蒜末 适量</li>
+                        <li>辣椒粉 适量</li>
+                        <li>芝麻 适量</li>
+                        <li>生抽 2勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>醋 2勺</li>
+                        <li>芝麻酱 1勺</li>
+                        <li>热油 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>锅中煮面，煮熟后捞出</li>
+                        <li>准备调料：蒜末、辣椒粉、芝麻淋入热油</li>
+                        <li>加入2勺生抽、1勺蚝油、2勺醋、1勺芝麻酱搅拌均匀</li>
+                        <li>再舀半碗煮面条的汤调成汤底</li>
+                        <li>面条放入碗中，加入汤底</li>
+                        <li>打入一个荷包蛋，放上火腿和青菜即可</li>
+                    </ol>
+                    <div class="tips">面条煮至8分熟即可，这样口感更好</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\鸡蛋饼.jpg" class="recipe-img" alt="鸡蛋饼">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>鸡蛋 4个</li>
+                        <li>面粉 120克</li>
+                        <li>葱花 适量</li>
+                        <li>火腿 适量</li>
+                        <li>盐 适量</li>
+                        <li>纯牛奶 适量</li>
+                        <li>食用油 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>4个鸡蛋加盐打散</li>
+                        <li>加入适量面粉（约120克）</li>
+                        <li>搅拌至无颗粒状（上打蛋器最快）</li>
+                        <li>加入葱花和火腿</li>
+                        <li>倒入纯牛奶（250ml瓶装的1/3）</li>
+                        <li>平底锅刷油倒入面糊</li>
+                        <li>小火慢煎，金黄熟透即可</li>
+                    </ol>
+                    <div class="tips">面糊不要太稀，否则饼不容易成型</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

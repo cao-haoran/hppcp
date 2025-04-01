@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱心菜谱 | 面食专区</title>
+    <style>
+        :root {
+            --primary-color: #ff7b7b;
+            --secondary-color: #ff9f7b;
+            --text-color: #333;
+            --light-bg: #fff9e6;
+            --dark-bg: #f5f5f5;
+        }
+
+        body {
+            font-family: '微软雅黑', sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+            color: var(--text-color);
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in;
+        }
+
+        .category {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .recipe-card {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 25px;
+            margin: 20px 0;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .recipe-card:hover {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .recipe-img {
+            width: 100%;
+            height: 350px;
+            /* 调整图片高度 */
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            transition: transform 0.3s ease, border 0.3s ease;
+        }
+
+        .recipe-card:hover .recipe-img {
+            transform: scale(1.03);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+            margin-top: 0;
+            font-size: 24px;
+            position: relative;
+        }
+
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        h3 {
+            color: #666;
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .content-wrapper {
+            display: flex;
+            gap: 25px;
+        }
+
+        .ingredients,
+        .steps {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        li:hover {
+            background: rgba(255, 123, 123, 0.1);
+        }
+
+        li::before {
+            content: "•";
+            margin-right: 10px;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        ol {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+
+        ol li {
+            margin-bottom: 5px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        ol li:hover {
+            background: rgba(255, 123, 123, 0.1);
+        }
+
+        .tips {
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 3px solid var(--primary-color);
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .tips::before {
+            content: "💡";
+            margin-right: 10px;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .recipe-card {
+                grid-template-columns: 1fr;
+            }
+
+            .recipe-img {
+                height: 300px;
+            }
+
+            .content-wrapper {
+                flex-direction: column;
+            }
+
+            .ingredients,
+            .steps {
+                margin-bottom: 20px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 新增样式 */
+        .banner {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .banner h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .banner p {
+            font-size: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>❤️ 黄萍萍的专属菜谱 ❤️</h1>
+        <p>每一口都是爱的味道</p>
+    </div>
+    <div class="banner">
+        <h2>🍜 欢迎来到面食专区</h2>
+        <p>面食，是中国传统美食的重要组成部分。从北方的面条、饺子，到南方的米粉、年糕，面食以其独特的口感和丰富的变化，赢得了无数食客的喜爱。在这里，我们将为您带来各种美味面食的制作方法，让您在家中也能轻松享受到地道的面食风味。
+        </p>
+        <a href="index.html" class="back-link">返回首页</a>
+    </div>
+
+    <!-- 面食菜谱 -->
+    <div class="category">
+        <h2>🍜 经典面食</h2>
+
+        <div class="recipe-card">
+            <img src="..\图片\豆角肉沫拌面.jpg" class="recipe-img" alt="豆角肉沫拌面">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>面条 200g</li>
+                        <li>香肠 1根</li>
+                        <li>蒜末、葱花、芝麻 适量</li>
+                        <li>孜然粉、辣椒面 适量</li>
+                        <li>生抽 2勺</li>
+                        <li>老抽 半勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>盐和糖 少许</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>准备蒜末、葱花、芝麻，香肠切片，调料备用</li>
+                        <li>锅中热油，淋上热油激发香味</li>
+                        <li>香肠煎一下，泡面煮熟捞出</li>
+                        <li>调料汁：2勺生抽、半勺老抽、1勺陈醋、1勺蚝油、少许盐和糖，拌匀成酱汁</li>
+                        <li>加入黄瓜丝、花生米，倒入酱汁拌匀即可</li>
+                    </ol>
+                    <div class="tips">酱汁可根据个人口味调整</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\番茄鸡蛋焖面.jpg" class="recipe-img" alt="番茄鸡蛋面">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>面条 200g</li>
+                        <li>西红柿 2个</li>
+                        <li>鸡蛋 2个</li>
+                        <li>葱花 适量</li>
+                        <li>盐 适量</li>
+                        <li>生抽 1勺</li>
+                        <li>糖 适量</li>
+                        <li>食用油 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>西红柿切块，鸡蛋打散</li>
+                        <li>锅中热油，倒入鸡蛋液炒熟，盛出备用</li>
+                        <li>锅中留底油，放入葱花爆香，加入西红柿翻炒</li>
+                        <li>加入适量清水，放入面条煮熟</li>
+                        <li>加入生抽、盐、糖调味，放入鸡蛋，搅拌均匀</li>
+                        <li>撒上葱花即可出锅</li>
+                    </ol>
+                    <div class="tips">西红柿提前用开水烫一下，更容易去皮</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\荷包蛋焖面.jpg" class="recipe-img" alt="荷包蛋焖面">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>面条 200g</li>
+                        <li>小葱 适量</li>
+                        <li>生抽 2勺</li>
+                        <li>老抽 1勺</li>
+                        <li>白糖 适量</li>
+                        <li>食用油 适量</li>
+                        <li>芝麻 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>小葱切段，锅中热油，放入葱段小火慢炸</li>
+                        <li>待葱段变黄，捞出葱段，留下葱油</li>
+                        <li>面条煮熟捞出，沥干水分</li>
+                        <li>在碗中加入2勺生抽、1勺老抽、适量白糖，搅拌均匀</li>
+                        <li>将面条放入碗中，倒入葱油，撒上芝麻，搅拌均匀即可</li>
+                    </ol>
+                    <div class="tips">葱油可以多做一些，下次拌面的时候还能用</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\酱香拌面.jpg" class="recipe-img" alt="酱香拌面">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>面粉 500g</li>
+                        <li>水 适量</li>
+                        <li>牛肉 300g</li>
+                        <li>葱姜 适量</li>
+                        <li>八角 适量</li>
+                        <li>桂皮 适量</li>
+                        <li>生抽 适量</li>
+                        <li>老抽 适量</li>
+                        <li>盐 适量</li>
+                        <li>香菜 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>面粉加水揉成光滑的面团，饧发30分钟</li>
+                        <li>牛肉切块，冷水下锅，加葱姜料酒焯水</li>
+                        <li>将牛肉、葱姜、八角、桂皮、生抽、老抽、盐放入锅中，加适量清水，小火炖煮1.5小时</li>
+                        <li>饧好的面团反复揉搓，拉成细长的面条</li>
+                        <li>锅中烧水，将拉好的面条放入煮熟</li>
+                        <li>煮好的面条捞出放入碗中，加入炖好的牛肉汤，撒上香菜即可</li>
+                    </ol>
+                    <div class="tips">面团饧发时间越长，拉面越容易成型</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\双椒肉丝拌面.jpg" class="recipe-img" alt="双椒肉丝拌面">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>面粉 300g</li>
+                        <li>韭菜 200g</li>
+                        <li>鸡蛋 2个</li>
+                        <li>虾皮 适量</li>
+                        <li>粉丝 适量</li>
+                        <li>盐 适量</li>
+                        <li>食用油 适量</li>
+                        <li>十三香 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>面粉加水揉成光滑的面团，饧发30分钟</li>
+                        <li>韭菜切末，鸡蛋炒熟切碎，粉丝泡软切碎</li>
+                        <li>将韭菜、鸡蛋、虾皮、粉丝放入碗中，加入盐、食用油、十三香，搅拌均匀</li>
+                        <li>饧好的面团分成小剂子，擀成圆形面皮</li>
+                        <li>将调好的馅料放在面皮上，对折捏紧边缘</li>
+                        <li>平底锅预热，刷油，放入韭菜盒子，小火煎至两面金黄即可</li>
+                    </ol>
+                    <div class="tips">韭菜盒子馅料可以根据个人口味添加其他食材</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\香辣牛肉面.jpg" class="recipe-img" alt="香辣牛肉面">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>面条 200g</li>
+                        <li>牛肉 300g</li>
+                        <li>葱姜 适量</li>
+                        <li>八角 适量</li>
+                        <li>桂皮 适量</li>
+                        <li>生抽 适量</li>
+                        <li>老抽 适量</li>
+                        <li>盐 适量</li>
+                        <li>香菜 适量</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>牛肉切块，冷水下锅，加葱姜料酒焯水</li>
+                        <li>将牛肉、葱姜、八角、桂皮、生抽、老抽、盐放入锅中，加适量清水，小火炖煮1.5小时</li>
+                        <li>面粉加水揉成光滑的面团，饧发30分钟</li>
+                        <li>饧好的面团反复揉搓，拉成细长的面条</li>
+                        <li>锅中烧水，将拉好的面条放入煮熟</li>
+                        <li>煮好的面条捞出放入碗中，加入炖好的牛肉汤，撒上香菜即可</li>
+                    </ol>
+                    <div class="tips">面团饧发时间越长，拉面越容易成型</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-card">
+            <img src="..\图片\孜然拌面.jpg" class="recipe-img" alt="孜然拌面">
+            <div class="content-wrapper">
+                <div class="ingredients">
+                    <h4>食材清单</h4>
+                    <ul>
+                        <li>面条 200g</li>
+                        <li>香肠 1根</li>
+                        <li>蒜末、葱花、芝麻 适量</li>
+                        <li>孜然粉、辣椒面 适量</li>
+                        <li>生抽 2勺</li>
+                        <li>老抽 半勺</li>
+                        <li>蚝油 1勺</li>
+                        <li>盐和糖 少许</li>
+                    </ul>
+                </div>
+                <div class="steps">
+                    <h4>制作步骤</h4>
+                    <ol>
+                        <li>准备蒜末、葱花、芝麻，香肠切片，调料备用</li>
+                        <li>锅中热油，淋上热油激发香味</li>
+                        <li>香肠煎一下，泡面煮熟捞出</li>
+                        <li>调料汁：2勺生抽、半勺老抽、1勺陈醋、1勺蚝油、少许盐和糖，拌匀成酱汁</li>
+                        <li>加入黄瓜丝、花生米，倒入酱汁拌匀即可</li>
+                    </ol>
+                    <div class="tips">酱汁可根据个人口味调整</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

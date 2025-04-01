@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱心菜谱 | 鱼香肉丝</title>
+    <style>
+        :root {
+            --primary-color: #ff7b7b;
+            --secondary-color: #ff9f7b;
+            --text-color: #333;
+            --light-bg: #fff9e6;
+            --dark-bg: #f5f5f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: '微软雅黑', sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+            color: var(--text-color);
+        }
+
+        /* 导航条样式 */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 头部横幅样式 */
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            animation: fadeIn 1s ease-in;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 菜品详情样式 */
+        .recipe-detail {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .recipe-img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .recipe-title {
+            color: var(--primary-color);
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+            margin-bottom: 20px;
+            font-size: 28px;
+            position: relative;
+        }
+
+        .recipe-title::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .recipe-description {
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .recipe-section {
+            margin-bottom: 40px;
+        }
+
+        .section-heading {
+            color: var(--primary-color);
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+            margin-bottom: 20px;
+            font-size: 22px;
+            position: relative;
+        }
+
+        .section-heading::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .ingredients-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .ingredient-item {
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .ingredient-item h4 {
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .steps-list {
+            margin-bottom: 30px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 8px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .step-description {
+            flex: 1;
+        }
+
+        .tips-box {
+            background: var(--light-bg);
+            border-left: 5px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tips-box h4 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .tips-box ul {
+            padding-left: 20px;
+        }
+
+        .tips-box li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background: white;
+            padding: 30px 0;
+            border-radius: 8px;
+            margin-top: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .recipe-img {
+                height: 300px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航条 -->
+    <nav class="navbar">
+        <div class="logo">爱心菜谱 <span>❤️</span></div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="recipes.html">菜谱</a>
+        </div>
+    </nav>
+
+    <!-- 头部横幅 -->
+    <div class="hero">
+        <h1>❤️ 黄萍萍的专属菜谱 ❤️</h1>
+        <p>每一口都是爱的味道，简单易学的家常菜谱，让您轻松做出美味佳肴</p>
+    </div>
+
+    <!-- 菜品详情 -->
+    <div class="recipe-detail">
+        <img src="..\图片\鱼香肉丝.jpg" class="recipe-img" alt="鱼香肉丝">
+        <h2 class="recipe-title">鱼香肉丝</h2>
+        <p class="recipe-description">这道鱼香肉丝是一道经典的川菜，肉丝鲜嫩，配菜爽脆，鱼香酱汁浓郁，酸甜适口，非常适合搭配米饭食用。</p>
+
+        <!-- 食材清单 -->
+        <div class="recipe-section">
+            <h3 class="section-heading">食材清单</h3>
+            <div class="ingredients-list">
+                <div class="ingredient-item">
+                    <h4>猪里脊肉</h4>
+                    <p>300克</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>青椒</h4>
+                    <p>1个</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>胡萝卜</h4>
+                    <p>1根</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>木耳</h4>
+                    <p>适量</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>蒜末</h4>
+                    <p>适量</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>姜末</h4>
+                    <p>适量</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>葱段</h4>
+                    <p>适量</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>生抽</h4>
+                    <p>2勺</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>老抽</h4>
+                    <p>1勺</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>料酒</h4>
+                    <p>1勺</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>盐</h4>
+                    <p>适量</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>白糖</h4>
+                    <p>2勺</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>醋</h4>
+                    <p>2勺</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>淀粉</h4>
+                    <p>适量</p>
+                </div>
+                <div class="ingredient-item">
+                    <h4>豆瓣酱</h4>
+                    <p>1勺</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 制作步骤 -->
+        <div class="recipe-section">
+            <h3 class="section-heading">制作步骤</h3>
+            <div class="steps-list">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-description">
+                        <h4>准备食材</h4>
+                        <p>将猪里脊肉切成细丝，青椒、胡萝卜切丝，木耳泡发后切丝，葱姜蒜切末。</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-description">
+                        <h4>腌制肉丝</h4>
+                        <p>肉丝中加入1勺生抽、少许淀粉和料酒，抓匀腌制15分钟。</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-description">
+                        <h4>炒制配菜</h4>
+                        <p>锅中倒油，放入青椒丝、胡萝卜丝和木耳丝，中小火煸炒至断生，盛出备用。</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-description">
+                        <h4>炒香调料</h4>
+                        <p>锅中留底油，放入葱姜蒜末和1勺豆瓣酱，小火炒出红油。</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">5</div>
+                    <div class="step-description">
+                        <h4>加入肉丝</h4>
+                        <p>放入腌制好的肉丝，快速翻炒至变色。</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">6</div>
+                    <div class="step-description">
+                        <h4>混合食材</h4>
+                        <p>将之前炒好的青椒丝、胡萝卜丝和木耳丝倒回锅中，与肉丝翻炒均匀。</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">7</div>
+                    <div class="step-description">
+                        <h4>调味</h4>
+                        <p>加入2勺生抽、1勺老抽、2勺醋、2勺白糖、少许盐，翻炒均匀。</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">8</div>
+                    <div class="step-description">
+                        <h4>勾芡</h4>
+                        <p>加入适量水淀粉勾芡，待汤汁浓稠后即可出锅。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 小贴士 -->
+        <div class="recipe-section">
+            <h3 class="section-heading">小贴士</h3>
+            <div class="tips-box">
+                <h4>烹饪技巧</h4>
+                <ul>
+                    <li>肉丝腌制时加入淀粉和料酒，可以使肉丝更加嫩滑，不易在炒制过程中变老。</li>
+                    <li>配菜先煸炒至断生，这样可以缩短与肉丝混合炒制的时间，保持蔬菜的脆嫩口感。</li>
+                    <li>鱼香酱汁的比例可以根据个人口味调整，喜欢酸一点可以多加些醋，喜欢甜一点可以多加些糖。</li>
+                    <li>最后勾芡可以使酱汁更加浓稠，更好地包裹在食材上，提升口感。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>关于我们</h3>
+                <p>爱心菜谱是一个专注于家常菜谱分享的平台，致力于为hpp提供餐品、美味实用的菜谱。</p>
+            </div>
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <a href="index.html">首页</a>
+                <a href="recipes.html">全部菜谱</a>
+            </div>
+            <div class="footer-section">
+                <h3>联系我们</h3>
+                <p>邮箱：hpp.com</p>
+                <p>电话：***********</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 520 hpp爱心菜谱 版权所有</p>
+        </div>
+    </footer>
+</body>
+</html>
